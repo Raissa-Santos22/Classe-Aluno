@@ -44,19 +44,35 @@ class Aluno {
     }
 
     public function __construct(){
-        /* a classe PDO foi criada para auxiliar a interação com o DB
-        ela precisa de tres atributos */
-
         $dns = "mysql:dbname=usuariopwii;host=localhost";
         $user = "root";
         $pass = "";
 
         try {
-        $this->pdo = new PDO($dns,$user,$pass);
+         $this->pdo = new PDO($dns,$user,$pass);
+         return true;
         } catch (\Throwable $th) {
             return false;
-        }
-        
+        }    
     }
-}
+    public function cadastrarAluno($nome, $ra, $curso, $periodo){
+        $cmd = "INSERT INTO aluno SET nome = $nome, ra = $ra, curso = $curso, periodo = $periodo";
+        $cmd = "INSERT INTO aluno SET nome = :n, ra = :r, curso = :c, periodo = :p";
+
+        $cmd = $this->pdo->prepare($cmd);
+        $cmd->bindValue( ":n", $nome );
+        $cmd->bindValue( ":r", $ra );
+        $cmd->bindValue( ":c", $curso );
+        $cmd->bindValue( ":p", $periodo );
+
+
+        return $cmd->execute();
+    }
+
+
+
+        
+      
+}      
+      
 ?>
